@@ -1,0 +1,40 @@
+# Navigate to project
+cd C:\Projects\x402_proj
+
+# Activate virtual environment
+x402\Scripts\activate
+
+# Deactivate when done
+deactivate
+
+# Run tests
+python src\data\test_apis.py
+
+# Open in VS Code
+code .
+```
+
+---
+
+## 🎯 Your Final Structure Should Look Like:
+```
+C:\Projects\x402_proj\
+├── x402\                  # Virtual environment
+├── src\
+│   ├── __init__.py
+│   ├── api\
+│   ├── models\
+│   ├── ai\
+│   ├── data\
+│   │   └── test_apis.py   # Your test script
+│   └── utils\
+├── tests\
+├── docs\
+├── data\
+│   ├── raw\
+│   └── processed\
+├── logs\
+├── .env
+├── .gitignore
+├── requirements.txt
+└── README.md
