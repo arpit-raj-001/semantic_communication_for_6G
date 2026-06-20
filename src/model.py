@@ -20,7 +20,7 @@ class SemanticEncoder(nn.Module):
     def forward(self, x: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
 
         # x is batch of tokenized sentences
-        # it returns hidden states and cell states 
+        #return ht,ct 
     
         embedded = self.embedding(x)
         
@@ -66,12 +66,8 @@ class JointSemanticModel(nn.Module):
 
     def forward(self, source_tokens: torch.Tensor, target_tokens: torch.Tensor, snr_override: float = None):
         """
-        Runs the full transmission pipeline (used during Training).
-        
-        Args:
             source_tokens: The text to transmit. Shape: [batch_size, seq_length]
-            target_tokens: The ground truth text used for "Teacher Forcing". Shape: [batch_size, seq_length]
-            snr_override: Dynamic channel condition testing.
+            target_tokens: Training ke liye true word de denge. Shape: [batch_size, seq_length]
         """
         batch_size = source_tokens.size(0)
         target_len = target_tokens.size(1)
@@ -95,7 +91,7 @@ if __name__ == "__main__":
     vocab_size = 500
     model = JointSemanticModel(vocab_size=vocab_size, embed_dim=64, hidden_dim=128, snr_db=10.0)
     
-    # Simulate a batch of 2 sentences, length 10
+    #dummy 2 sentence , 10 lenth
     dummy_source = torch.randint(1, vocab_size, (2, 10))
     dummy_target = torch.randint(1, vocab_size, (2, 10))
     
