@@ -10,19 +10,20 @@ To do this, we treat the entire communication pipeline—the Transmitter, the No
 
 ### Why do we need a Text Dataset?
 
-Because meaning is context-dependent, our Neural Network must learn the statistical distribution of human language.
+Because meaning is context-dependent, our model will have to learn how humans interact
 
-- If the network receives a noisy representation of the word "bark," it needs to know if we are talking about a dog or a tree.
-- The dataset serves as the "world knowledge" that allows the Semantic Receiver to perform error correction using context, much like how a human listener can fill in a dropped word during a bad phone call.
+- once the model is trained , it will decode the output and look at all the words in vocab knowledge base to increase the score and eventually occupy the one with highest match
+- The dataset serves as the "knowledge vase" that allows the Semantic Receiver to perform error correction using context
 
 ### The Europarl Corpus
 
 For this project, we use the **Europarl corpus** (European Parliament Proceedings Parallel Corpus).
-Why Europarl?
 
-1. **Complexity:** It contains formal, complex, and highly structured sentences, making it much harder than simple datasets like IMDB reviews.
+1. **Complexity:** It contains formal, complex, and highly structured sentences, making it much harder than simple datasets like IMDB reviews
+
 2. **Variable Length:** Sentences range from very short (3 words) to extremely long (100+ words). This is crucial because compressing a 100-word sentence into a fixed-length mathematical vector is much harder than compressing a 5-word sentence.
-3. **Research Standard:** It is the standard benchmark used in Deep Learning-Enabled Semantic Communication papers (like Zhang et al.).
+
+3. **Research Standard:** It is the standard benchmark used in DL/ML implemented Semantic Communication papers
 
 ### Length Categorization
 
