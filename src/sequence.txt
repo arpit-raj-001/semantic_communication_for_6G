@@ -1,1 +1,1 @@
-data_loader->tokenizer->channel->model->train
+data_loader->tokenizer->channel->model->train->metrics
