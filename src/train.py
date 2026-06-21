@@ -32,7 +32,7 @@ def train_model():
     
     #data load
     data_dir = r"C:\Users\Shrish\Desktop\semantic-comm\Semantic_Communication\europarl\en\en"
-    loader = EuroparlDataLoader(data_dir=data_dir, target_sentences=1000)
+    loader = EuroparlDataLoader(data_dir=data_dir, target_sentences=30000)
     loader.scan_and_load()
     
     if len(loader.all_sentences) == 0:
@@ -68,7 +68,7 @@ def train_model():
     #ignore pads
     criterion = nn.CrossEntropyLoss(ignore_index=tokenizer.PAD_ID)
     
-    epochs = 3
+    epochs = 10
     print(f"\nTraining on {len(sentences)} sentences for {epochs} epochs...")
     print(f"Vocab Size: {tokenizer.vocab_size} \n")
     
@@ -104,6 +104,12 @@ def train_model():
         print(f"Epoch {epoch+1} Completed | Average Loss: {avg_loss:.4f}")
         
     print("\ndone training!")
+    
+    # Save the central model
+    os.makedirs(os.path.abspath(r"C:\Users\Shrish\Desktop\semantic-comm\actual_project\models"), exist_ok=True)
+    model_path = os.path.abspath(r"C:\Users\Shrish\Desktop\semantic-comm\actual_project\models\lstm_baseline.pt")
+    torch.save(model.state_dict(), model_path)
+    print(f"Model saved to: {model_path}")
     
     
 if __name__ == "__main__":
