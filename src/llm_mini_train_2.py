@@ -1,13 +1,9 @@
-#this one is channel aware model much better than model1
-
-
-# import torch
 import torch.optim as optim
 from torch.utils.data import DataLoader, Dataset
 from transformers import T5Tokenizer
+import torch
 import sys
 import os
-import random
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), r'C:\Users\Shrish\Desktop\semantic-comm\actual_project')))
 from src.data_loader import EuroparlDataLoader
@@ -37,39 +33,34 @@ class EuroparlT5Dataset(Dataset):
         
         return input_ids, attention_mask, labels
 
-
-def train_curriculum_jscc():
+def mini_train():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Hardware utilized: {device}")
-    
-    # We use a large dataset to ensure the model generalizes the manifold
+   
     data_dir = r"C:\Users\Shrish\Desktop\semantic-comm\Semantic_Communication\europarl\en\en"
-    loader = EuroparlDataLoader(data_dir=data_dir, target_sentences=150000)
+    loader = EuroparlDataLoader(data_dir=data_dir, target_sentences=9000)
     loader.scan_and_load()
-    sentences = loader.all_sentences if len(loader.all_sentences) > 0 else ["Dummy dataset protection"] * 50000
+    sentences = loader.all_sentences if len(loader.all_sentences) > 0 else ["Dummy dataset protection"] * 5000
     
-    print(f"Total sentences loaded: {len(sentences)}")
+    print(f"Total sentences : {len(sentences)}")
     
-    tokenizer = T5Tokenizer.from_pretrained("t5-small")
+    tokenizer = T5Tokenizer.from_pretrained("t5-small", local_files_only=True)
     dataset = EuroparlT5Dataset(sentences, tokenizer, max_length=32)
-    dataloader = DataLoader(dataset, batch_size=64, shuffle=True)
-    
-    # Load the Advanced Model with the SNR Embedding Layer
+    dataloader = DataLoader(dataset, batch_size=32, shuffle=True)
     model = AdvancedGenerativeSemanticModel(model_name="t5-small", snr_db=10.0).to(device)
     optimizer = optim.Adam(model.parameters(), lr=1e-4)
     
-    epochs = 5
-    print(f"\nCommencing Phase 2 Advanced Curriculum Training...")
+    
+    epochs = 3
+    
     
     model.train()
     for epoch in range(epochs):
-        # Stage 1: Clean Pretraining (Epoch 1)
-        # Stage 2: Adaptive JSCC (Epoch 2+)
         if epoch == 0:
-            print(f"--- Stage 1: Clean Channel Pretraining (Epoch {epoch+1}/{epochs}) ---")
+            print(f"Clean: (Epoch {epoch+1}/{epochs}) ")
             current_stage = "Clean"
         else:
-            print(f"--- Stage 2: Adaptive JSCC Curriculum (Epoch {epoch+1}/{epochs}) ---")
+            print(f"Adaptive (epoch) {epoch+1}/{epochs}) ---")
             current_stage = "Adaptive"
             
         total_loss = 0.0
@@ -94,22 +85,23 @@ def train_curriculum_jscc():
             optimizer.step()
             total_loss += loss.item()
             
-            if batch_idx % 50 == 0:
+            if batch_idx % 10 == 0:
                 print(f"Epoch {epoch+1} | Batch {batch_idx:04d}/{len(dataloader)} | Loss: {loss.item():.4f}")
                 
         avg_loss = total_loss / len(dataloader)
-        print(f"=== Epoch {epoch+1} Completed | Average Loss: {avg_loss:.4f} ===\n")
+        print(f"Epoch {epoch+1}  | Average Loss: {avg_loss:.4f} ===\n")
         
-    print("Advanced Curriculum Training Phase Complete!")
+    print("done")
     
     models_dir = os.path.abspath(r"C:\Users\Shrish\Desktop\semantic-comm\actual_project\models")
     os.makedirs(models_dir, exist_ok=True)
     model_path = os.path.join(models_dir, "t5_semantic_advanced.pt")
     
     torch.save(model.state_dict(), model_path)
-    print(f"\n[SUCCESS] Advanced Adaptive Model saved to: {model_path}")
+    print(f"\nMini-Trained Model saved to: {model_path}")
 
 if __name__ == "__main__":
     import warnings
     warnings.filterwarnings("ignore")
-    train_curriculum_jscc()
+    os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+    mini_train()
