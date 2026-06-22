@@ -94,25 +94,6 @@ graph TD
 
 ---
 
-## 🛠️ Getting Started
-
-### 1. Train the Adaptive Model
-
-To break the initial random symmetry and organize the semantic geometry, run the rapid prototyping curriculum (15 mins):
-
-```bash
-python src/llm_mini_train_2.py
-```
-
-_Note: For maximum BLEU score, run `src/llm_train_2.py` overnight._
-
-### 2. Run the Geometric Probing Suite
-
-Open your Jupyter environment and execute the analysis notebooks sequentially to witness the manifold physics in real-time:
-
-1. **`effectiverank.ipynb`**: Watch the singular value spectrum flatten and intrinsic dimensionality expand.
-2. **`information_bottleneck.ipynb`**: Observe the PCA reconstruction loss skyrocket, proving Latent Semantic Diversity.
-3. **`cka_analysis.ipynb`**: See the representation geometry deform in real-time as channel conditions worsen.
 
 ---
 
